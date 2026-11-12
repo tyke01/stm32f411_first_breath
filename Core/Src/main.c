@@ -22,9 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "usbd_cdc_if.h"
-#include <stdio.h>
-
+#include "app.h"
 
 /* USER CODE END Includes */
 
@@ -46,8 +44,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-static uint8_t txBuf[64];
-static volatile uint8_t txStatus;
 
 /* USER CODE END PV */
 
@@ -95,8 +91,7 @@ int main(void) {
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
-  uint32_t lastBlink = HAL_GetTick();
-  uint32_t lastPrint = HAL_GetTick();
+  app_setup();
 
   /* USER CODE END 2 */
 
@@ -107,18 +102,7 @@ int main(void) {
 
     /* USER CODE BEGIN 3 */
 
-    uint32_t now = HAL_GetTick();
-
-    if (now - lastBlink >= 500) {
-      HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-      lastBlink = now;
-    }
-
-    if (now - lastPrint >= 1000) {
-      int len = snprintf((char *)txBuf, sizeof(txBuf), "tick: %lu\r\n", now);
-      lastPrint = now;
-      txStatus = CDC_Transmit_FS(txBuf, len);
-    }
+    app_loop();
   }
   /* USER CODE END 3 */
 }
