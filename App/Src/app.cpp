@@ -4,6 +4,8 @@
 #include "usbd_cdc_if.h"
 #include <cstdio>
 
+extern TIM_HandleTypeDef htim3;
+
 static uint8_t txBuf[64];
 static volatile uint8_t txStatus;
 
@@ -14,6 +16,8 @@ void app_setup(void) {
   // Initialization code here
   blinkTimer.reset(HAL_GetTick());
   printTimer.reset(HAL_GetTick());
+
+  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);
 }
 
 void app_loop(void) {
