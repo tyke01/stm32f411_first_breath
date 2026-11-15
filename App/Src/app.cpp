@@ -7,6 +7,7 @@
 constexpr int32_t kPwmMax = 1000; // TIM3 ARR (999) + 1, set in CubeMX
 
 extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim2;
 
 static uint8_t txBuf[64];
 static volatile uint8_t txStatus;
@@ -25,6 +26,9 @@ void app_setup(void) {
   fadeTimer.reset(HAL_GetTick());
 
   if (HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK) {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2) != HAL_OK) {
     Error_Handler();
   }
 }
