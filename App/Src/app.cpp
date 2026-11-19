@@ -1,6 +1,7 @@
 #include "app.h"
 #include "main.h"
 #include "periodic_timer.hpp"
+#include "servo.hpp"
 #include "usbd_cdc_if.h"
 #include <cstdio>
 
@@ -19,6 +20,8 @@ static PeriodicTimer blinkTimer(500);
 static PeriodicTimer printTimer(1000);
 static PeriodicTimer fadeTimer(10);
 
+static Servo servo1(&htim2, TIM_CHANNEL_2, 1000, 2000);
+
 void app_setup(void) {
   // Initialization code here
   blinkTimer.reset(HAL_GetTick());
@@ -28,9 +31,10 @@ void app_setup(void) {
   if (HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1) != HAL_OK) {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_2) != HAL_OK) {
-    Error_Handler();
-  }
+
+  if (!servo1.start()) {
+  Error_Handler();
+}
 }
 
 void app_loop(void) {
